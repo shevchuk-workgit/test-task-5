@@ -18,32 +18,22 @@
       </tr>
     </thead>
     <tbody class="main-table_body">
-      <tr
+      <main-table-row
         class="main-table_body_row"
         v-for="(user, index) in usersList"
         :key="index"
+        :user="user"
       >
-        <td
-          class="main-table_body_cell"
-          v-for="(userFeature, index) in user"
-          :key="index"
-        >
-          {{ userFeature }}
-        </td>
-        <td class="main-table_body_cell main-table_body_cell_row-button">
-          <ui-edit-row-button></ui-edit-row-button
-          ><ui-remove-row-button></ui-remove-row-button>
-        </td>
-      </tr>
+      </main-table-row>
     </tbody>
   </table>
 </template>
 
 <script>
-import UiEditRowButton from "@/ui/UiEditRowButton.vue";
-import UiRemoveRowButton from "@/ui/UiRemoveRowButton.vue";
+import MainTableRow from "./MainTableRow.vue";
+
 export default {
-  components: { UiEditRowButton, UiRemoveRowButton },
+  components: { MainTableRow },
 
   data() {
     return {
@@ -57,18 +47,14 @@ export default {
       ],
     };
   },
-
-  methods: {
-    test() {
-      console.log(userFeature);
-    },
-  },
 };
 </script>
 
 <style scoped>
 .main-table_table {
   margin-bottom: 16px;
+  table-layout: fixed;
+  width: 100%;
 }
 .main-table_head {
   color: white;
@@ -91,17 +77,8 @@ export default {
 .main-table_body_row {
   border-bottom: 2px solid rgb(180, 180, 180);
 }
-.main-table_body_cell {
-  padding: 10px;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-}
+
 .main-table_settings-icon {
   height: 30px;
-}
-.main-table_body_cell_row-button {
-  width: 100px;
 }
 </style>
