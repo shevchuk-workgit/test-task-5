@@ -11,6 +11,7 @@
         type="text"
         v-model="changedUser[index]"
       />
+
       <p v-if="!textEditing" class="main-table-row_cell_font">
         {{ userFeature }}
       </p>
@@ -38,7 +39,7 @@ export default {
 
   data() {
     return {
-      changedUser: false,
+      changedUser: [],
       textEditing: false,
     };
   },
@@ -47,20 +48,21 @@ export default {
     user: {
       type: Array,
     },
+
   },
 
   methods: {
-
     startEditRow() {
       this.textEditing = true;
     },
     acceptEditRow() {
       this.textEditing = false;
+      this.$emit("changeUser", this.changedUser);
     },
   },
 
   mounted() {
-    this.changedUser = this.user;
+    this.changedUser = { ...this.user };
   },
 };
 </script>

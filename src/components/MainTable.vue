@@ -23,8 +23,10 @@
         v-for="(user, index) in usersList"
         :key="index"
         :user="user"
+        @changeUser="changeUserFeature"
       >
       </main-table-row>
+      <!-- @changeUser="$emit(`changeUser`, changedUser,index)" -->
     </tbody>
   </table>
 </template>
@@ -37,15 +39,30 @@ export default {
 
   data() {
     return {
-      headers: ["Name", "Gental", "email", "Birthday"],
-      usersList: [
-        ["James", "Male", "asfasfsf@hotmail.com", "22.01.1993"],
-        ["Sams", "Male", "dfdfhdfhdfh@hotmail.com", "17.04.1999"],
-        ["Mary", "Female", "jgfgdfdfg@hotmail.com", "05.05.1995"],
-        ["Ashly", "Female", "afhdfhr@hotmail.com", "31.08.1996"],
-        ["Eden", "Male", "asfsaffw@hotmail.com", "22.11.2001"],
-      ],
+      // newUserList: [],
     };
+  },
+
+  props: {
+    headers: {
+      type: Array,
+    },
+    usersList: {
+      type: Array,
+    },
+  },
+
+  methods: {
+    changeUserFeature(newUser, index) {
+      // this.newUserList=this.usersList
+      // this.newUserList
+      // this.$emit()
+      console.log(newUser, index);
+
+      this.$emit("changeUser", newUser);
+
+      // console.log(index)
+    },
   },
 };
 </script>
