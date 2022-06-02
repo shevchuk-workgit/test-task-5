@@ -46,8 +46,11 @@ export default {
 
   props: {
     user: {
-      type: Array,
+      type: Object,
     },
+    indexUser:{
+      type:Number
+    }
 
   },
 
@@ -57,7 +60,7 @@ export default {
     },
     acceptEditRow() {
       this.textEditing = false;
-      this.$emit("changeUser", this.changedUser);
+      this.$emit("changeUser", this.changedUser,this.indexUser);
     },
   },
 

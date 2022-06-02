@@ -1,7 +1,11 @@
 <template>
   <div class="main-page_container">
     <ui-add-button class="ui-add-button_column">Add column</ui-add-button>
-    <main-table :headers="headers" :usersList="usersList" @changeUser="changeUser"></main-table>
+    <main-table
+      :headers="headers"
+      :usersList="usersList"
+      @changeUser="changeUser"
+    ></main-table>
     <ui-add-button class="ui-add-button_row" @click="createNewUser"
       >Add New Row</ui-add-button
     >
@@ -66,9 +70,15 @@ export default {
   },
 
   methods: {
-    changeUser(user,index){
-      console.log(user,index)
-      console.log(this.usersList[index])
+    changeUser(newUser, index) {
+      // console.log(newUser, index);
+      // console.log(this.usersList[index]);
+      const newUserList = [...this.usersList.slice(0,[index]),newUser,...this.usersList.slice([index+1])]
+      // console.log(newUserList)
+      this.usersList=newUserList
+
+
+
     },
 
     createNewUser() {

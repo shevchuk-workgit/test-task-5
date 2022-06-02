@@ -23,10 +23,10 @@
         v-for="(user, index) in usersList"
         :key="index"
         :user="user"
+        :indexUser="index"
         @changeUser="changeUserFeature"
       >
       </main-table-row>
-      <!-- @changeUser="$emit(`changeUser`, changedUser,index)" -->
     </tbody>
   </table>
 </template>
@@ -38,9 +38,7 @@ export default {
   components: { MainTableRow },
 
   data() {
-    return {
-      // newUserList: [],
-    };
+    return {};
   },
 
   props: {
@@ -54,14 +52,7 @@ export default {
 
   methods: {
     changeUserFeature(newUser, index) {
-      // this.newUserList=this.usersList
-      // this.newUserList
-      // this.$emit()
-      console.log(newUser, index);
-
-      this.$emit("changeUser", newUser);
-
-      // console.log(index)
+      this.$emit("changeUser", newUser, index);
     },
   },
 };
