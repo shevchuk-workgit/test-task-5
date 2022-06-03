@@ -1,21 +1,19 @@
 <template>
   <tr>
-    <td
-      class="main-table-row_cell"
-      v-for="(userFeature, index) in changedUser"
-      :key="index"
-    >
-      <input
-        v-if="textEditing"
-        class="main-table-row_cell_font main-table-row_cell_input"
-        type="text"
-        v-model="changedUser[index]"
-      />
+    <template v-for="(rowFeature, index, name) in changedRow" :key="name">
+      <td v-if="rowFeature.title" class="main-table-row_cell">
+        <input
+          v-if="textEditing"
+          class="main-table-row_cell_font main-table-row_cell_input"
+          type="text"
+          v-model="changedRow[index].title"
+        />
 
-      <p v-if="!textEditing" class="main-table-row_cell_font">
-        {{ userFeature }}
-      </p>
-    </td>
+        <p v-if="!textEditing" class="main-table-row_cell_font">
+          {{ rowFeature.title }}
+        </p>
+      </td>
+    </template>
     <td class="main-table-row_cell main-table-row_cell_row-button">
       <ui-edit-row-button
         v-if="!textEditing"
@@ -25,7 +23,7 @@
         v-if="textEditing"
         @click="acceptEditRow"
       ></ui-accept-row-button>
-      <ui-remove-row-button></ui-remove-row-button>
+      <ui-remove-row-button @click="deleteRow"></ui-remove-row-button>
     </td>
   </tr>
 </template>
@@ -39,19 +37,18 @@ export default {
 
   data() {
     return {
-      changedUser: [],
+      changedRow: [],
       textEditing: false,
     };
   },
 
   props: {
-    user: {
+    row: {
       type: Object,
     },
-    indexUser:{
-      type:Number
-    }
-
+    indexRow: {
+      type: Number,
+    },
   },
 
   methods: {
@@ -60,12 +57,20 @@ export default {
     },
     acceptEditRow() {
       this.textEditing = false;
-      this.$emit("changeUser", this.changedUser,this.indexUser);
+      this.$emit("changeRow", this.changedRow, this.indexRow);
+    },
+    deleteRow() {
+      this.$emit("removeRow", this.indexRow);
+      // console.log(this.row);
     },
   },
 
   mounted() {
-    this.changedUser = { ...this.user };
+    this.changedRow = { ...this.row };
+
+    if(this.row.textEditing===true){
+      this.textEditing=true
+    }
   },
 };
 </script>

@@ -4,10 +4,10 @@
       <tr>
         <th
           class="main-table_head_cell"
-          v-for="(header, index) in headers"
-          :key="index"
+          v-for="(header) in headers"
+          :key="header.id"
         >
-          {{ header }}
+          {{ header.title }}
         </th>
         <th class="main-table_head_cell">
           <img
@@ -20,11 +20,12 @@
     <tbody class="main-table_body">
       <main-table-row
         class="main-table_body_row"
-        v-for="(user, index) in usersList"
-        :key="index"
-        :user="user"
-        :indexUser="index"
-        @changeUser="changeUserFeature"
+        v-for="(row, index) in rowList"
+        :key="row.id"
+        :row="row"
+        :indexRow="index"
+        @changeRow="changeRowFeature"
+        @removeRow="removeRow"
       >
       </main-table-row>
     </tbody>
@@ -43,16 +44,20 @@ export default {
 
   props: {
     headers: {
-      type: Array,
+      type: Object,
     },
-    usersList: {
+    rowList: {
       type: Array,
     },
   },
 
   methods: {
-    changeUserFeature(newUser, index) {
-      this.$emit("changeUser", newUser, index);
+    changeRowFeature(newRow, indexRow) {
+      this.$emit("changeRow", newRow, indexRow);
+    },
+    removeRow(indexRow) {
+      this.$emit("removeRow", indexRow);
+      
     },
   },
 };
