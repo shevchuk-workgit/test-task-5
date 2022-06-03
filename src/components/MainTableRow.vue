@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <template v-for="(rowFeature, index, name) in changedRow" :key="name">
+    <template v-for="(rowFeature, index) in changedRow" :key="rowFeature.id">
       <td v-if="rowFeature.title" class="main-table-row_cell">
         <input
           v-if="textEditing"
@@ -8,6 +8,7 @@
           type="text"
           v-model="changedRow[index].title"
         />
+        {{rowFeature.id}}
 
         <p v-if="!textEditing" class="main-table-row_cell_font">
           {{ rowFeature.title }}
