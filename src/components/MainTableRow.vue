@@ -31,6 +31,7 @@
 import UiEditRowButton from "@/ui/UiEditRowButton.vue";
 import UiRemoveRowButton from "@/ui/UiRemoveRowButton.vue";
 import UiAcceptRowButton from "@/ui/UiAcceptRowButton.vue";
+
 export default {
   components: { UiEditRowButton, UiRemoveRowButton, UiAcceptRowButton },
 
@@ -38,6 +39,7 @@ export default {
     return {
       changedRow: {},
       textEditing: false,
+      test: this.$store.state.rowList[this.indexRow],
     };
   },
 
@@ -65,6 +67,18 @@ export default {
     },
   },
 
+  updated() {
+    if (
+      JSON.stringify(this.$store.state.rowList[this.indexRow]) !=
+      JSON.stringify(this.changedRow)
+    ) {
+      console.log(1);
+      this.changedRow = JSON.parse(
+        JSON.stringify(this.$store.state.rowList[this.indexRow])
+      );
+    }
+  },
+
   mounted() {
     this.changedRow = JSON.parse(
       JSON.stringify(this.$store.state.rowList[this.indexRow])
@@ -74,6 +88,20 @@ export default {
       this.textEditing = true;
     }
   },
+
+  // watch: {
+
+  //   test:{
+
+  //       handler: (newProp, oldProp) => {
+  //         this.changedRow = JSON.parse(
+  //           JSON.stringify(this.$store.state.rowList[this.indexRow])
+  //         );
+  //       },
+  //       deep: true,
+  //     },
+
+  //   },
 };
 </script>
 
