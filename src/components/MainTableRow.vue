@@ -8,8 +8,6 @@
           type="text"
           v-model="changedRow[index].title"
         />
-        {{rowFeature.id}}
-
         <p v-if="!textEditing" class="main-table-row_cell_font">
           {{ rowFeature.title }}
         </p>
@@ -38,7 +36,7 @@ export default {
 
   data() {
     return {
-      changedRow: [],
+      changedRow: {},
       textEditing: false,
     };
   },
@@ -58,19 +56,22 @@ export default {
     },
     acceptEditRow() {
       this.textEditing = false;
-      this.$emit("changeRow", this.changedRow, this.indexRow);
+
+      this.$store.commit("changeRow", [this.changedRow, this.indexRow]);
     },
+
     deleteRow() {
-      this.$emit("removeRow", this.indexRow);
-      // console.log(this.row);
+      this.$store.commit("removeRow", this.indexRow);
     },
   },
 
   mounted() {
-    this.changedRow = { ...this.row };
+    this.changedRow = JSON.parse(
+      JSON.stringify(this.$store.state.rowList[this.indexRow])
+    );
 
-    if(this.row.textEditing===true){
-      this.textEditing=true
+    if (this.row.textEditing === true) {
+      this.textEditing = true;
     }
   },
 };

@@ -4,7 +4,7 @@
       <tr>
         <th
           class="main-table_head_cell"
-          v-for="(header) in headers"
+          v-for="header in $store.state.headers"
           :key="header.id"
         >
           {{ header.title }}
@@ -20,12 +20,10 @@
     <tbody class="main-table_body">
       <main-table-row
         class="main-table_body_row"
-        v-for="(row, index) in rowList"
+        v-for="(row, index) in $store.state.rowList"
         :key="row.id"
         :row="row"
         :indexRow="index"
-        @changeRow="changeRowFeature"
-        @removeRow="removeRow"
       >
       </main-table-row>
     </tbody>
@@ -43,22 +41,21 @@ export default {
   },
 
   props: {
-    headers: {
-      type: Object,
-    },
-    rowList: {
-      type: Array,
-    },
+    // headers: {
+    //   type: Object,
+    // },
+    // rowList: {
+    //   type: Array,
+    // },
   },
 
   methods: {
-    changeRowFeature(newRow, indexRow) {
-      this.$emit("changeRow", newRow, indexRow);
-    },
-    removeRow(indexRow) {
-      this.$emit("removeRow", indexRow);
-      
-    },
+    // changeRowFeature(newRow, indexRow) {
+    //   this.$emit("changeRow", newRow, indexRow);
+    // },
+    // removeRow(indexRow) {
+    //   this.$emit("removeRow", indexRow);
+    // },
   },
 };
 </script>
