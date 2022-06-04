@@ -3,23 +3,23 @@
     <template v-for="(rowFeature, index) in changedRow" :key="rowFeature.id">
       <td v-if="rowFeature.title" class="main-table-row_cell">
         <input
-          v-if="textEditing"
+          v-if="row.textEditing"
           class="main-table-row_cell_font main-table-row_cell_input"
           type="text"
           v-model="changedRow[index].title"
         />
-        <p v-if="!textEditing" class="main-table-row_cell_font">
+        <p v-if="!row.textEditing" class="main-table-row_cell_font">
           {{ rowFeature.title }}
         </p>
       </td>
     </template>
     <td class="main-table-row_cell main-table-row_cell_row-button">
       <ui-edit-row-button
-        v-if="!textEditing"
+        v-if="!row.textEditing"
         @click="startEditRow"
       ></ui-edit-row-button>
       <ui-accept-row-button
-        v-if="textEditing"
+        v-if="row.textEditing"
         @click="acceptEditRow"
       ></ui-accept-row-button>
       <ui-remove-row-button @click="deleteRow"></ui-remove-row-button>
@@ -37,9 +37,7 @@ export default {
 
   data() {
     return {
-      changedRow: {},
-      textEditing: false,
-      test: this.$store.state.rowList[this.indexRow],
+      changedRow: [],
     };
   },
 
@@ -54,12 +52,12 @@ export default {
 
   methods: {
     startEditRow() {
-      this.textEditing = true;
+      this.$store.commit("changeTextEditing", [true, this.indexRow]);
     },
-    acceptEditRow() {
-      this.textEditing = false;
 
+    acceptEditRow() {
       this.$store.commit("changeRow", [this.changedRow, this.indexRow]);
+      this.$store.commit("changeTextEditing", [false, this.indexRow]);
     },
 
     deleteRow() {
@@ -68,14 +66,8 @@ export default {
   },
 
   updated() {
-    if (
-      JSON.stringify(this.$store.state.rowList[this.indexRow]) !=
-      JSON.stringify(this.changedRow)
-    ) {
-      console.log(1);
-      this.changedRow = JSON.parse(
-        JSON.stringify(this.$store.state.rowList[this.indexRow])
-      );
+    if (!this.row.textEditing) {
+      this.watchRowList;
     }
   },
 
@@ -83,25 +75,15 @@ export default {
     this.changedRow = JSON.parse(
       JSON.stringify(this.$store.state.rowList[this.indexRow])
     );
-
-    if (this.row.textEditing === true) {
-      this.textEditing = true;
-    }
   },
 
-  // watch: {
-
-  //   test:{
-
-  //       handler: (newProp, oldProp) => {
-  //         this.changedRow = JSON.parse(
-  //           JSON.stringify(this.$store.state.rowList[this.indexRow])
-  //         );
-  //       },
-  //       deep: true,
-  //     },
-
-  //   },
+  computed: {
+    watchRowList() {
+      this.changedRow = this.changedRow = JSON.parse(
+        JSON.stringify(this.$store.state.rowList[this.indexRow])
+      );
+    },
+  },
 };
 </script>
 

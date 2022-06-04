@@ -8,7 +8,7 @@ export default createStore({
       column_3: { title: "email", type: "text", id: 3 },
       column_4: { title: "Birthday", type: "date", id: 4 },
     },
-    
+
     rowList: [
       {
         id: 1,
@@ -57,37 +57,29 @@ export default createStore({
   getters: {},
 
   mutations: {
+    disableTextEditing(state) {
+      state.rowList.map((item) => {
+        item.textEditing = false;
+      });
+    },
     createNewColumn(state) {
-      // // console.log(Object.keys(this.headers).length)
-
       state.currentColumnValue += 1;
 
       const newColumnValue = `column_${state.currentColumnValue}`;
 
-      console.log(newColumnValue);
-
       state.headers[newColumnValue] = { title: "NewColumn", type: "text" };
-
-      // console.log(state.headers);
 
       const newRowList = JSON.parse(JSON.stringify(state.rowList));
 
       newRowList.map((item) => {
-        // console.log(item);
-
         item[newColumnValue] = {
           title: "NewColumn",
           type: "text",
           id: Date.now(),
         };
       });
-      console.log(newRowList);
-      // console.log(state.rowList);
-
 
       state.rowList = JSON.parse(JSON.stringify(newRowList));
-      console.log(state.rowList);
-
     },
 
     createNewRow(state, n) {
@@ -118,6 +110,10 @@ export default createStore({
       ];
 
       state.rowList = JSON.parse(JSON.stringify(newRowList));
+    },
+
+    changeTextEditing(state, [currentTextEditing, indexRow]) {
+      state.rowList[indexRow].textEditing = currentTextEditing;
     },
   },
 
