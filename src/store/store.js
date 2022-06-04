@@ -52,29 +52,40 @@ export default createStore({
       },
     ],
     currentColumnValue: 4,
+    showModalCreateColumn: false,
   }),
 
   getters: {},
 
   mutations: {
+    changeShowModalCreateColumn(state) {
+      state.showModalCreateColumn = !state.showModalCreateColumn;
+      // console.log(state.showModalCreateColumn)
+    },
     disableTextEditing(state) {
       state.rowList.map((item) => {
         item.textEditing = false;
       });
     },
-    createNewColumn(state) {
+    createNewColumn(state, [columnName, type, TypeProperty]) {
+      let stepNumber;
+      if (type === "number") {
+        stepNumber = `${TypeProperty.slice(0, -1)}1`;
+      }
+
       state.currentColumnValue += 1;
 
       const newColumnValue = `column_${state.currentColumnValue}`;
 
-      state.headers[newColumnValue] = { title: "NewColumn", type: "text" };
+      state.headers[newColumnValue] = { title: columnName, type: type, step:stepNumber};
 
       const newRowList = JSON.parse(JSON.stringify(state.rowList));
 
       newRowList.map((item) => {
         item[newColumnValue] = {
-          title: "NewColumn",
-          type: "text",
+          title: TypeProperty,
+          type: type,
+          step:stepNumber,
           id: Date.now(),
         };
       });
@@ -82,7 +93,7 @@ export default createStore({
       state.rowList = JSON.parse(JSON.stringify(newRowList));
     },
 
-    createNewRow(state, n) {
+    createNewRow(state) {
       const newRowListItem = {
         id: Date.now(),
         textEditing: true,

@@ -1,12 +1,30 @@
 <template>
   <tr>
     <template v-for="(rowFeature, index) in changedRow" :key="rowFeature.id">
-      <td v-if="rowFeature.title" class="main-table-row_cell">
+      <td
+        v-if="rowFeature.title || rowFeature.title == ''"
+        class="main-table-row_cell"
+      >
         <input
-          v-if="row.textEditing"
+          v-if="row.textEditing && rowFeature.type !== 'number'"
           class="main-table-row_cell_font main-table-row_cell_input"
           type="text"
           v-model="changedRow[index].title"
+        />
+        <input
+          v-if="row.textEditing && rowFeature.type === 'number'"
+          class="main-table-row_cell_font main-table-row_cell_input"
+          type="number"
+          v-model="changedRow[index].title"
+          :step="changedRow[index].step"
+          @keypress.stop="
+            inputTypeNumber(
+              changedRow[index].title,
+              changedRow[index].step,
+              $event
+            )
+          "
+
         />
         <p v-if="!row.textEditing" class="main-table-row_cell_font">
           {{ rowFeature.title }}
@@ -51,6 +69,45 @@ export default {
   },
 
   methods: {
+    asf(a) {
+      console.log(a);
+    },
+    inputTypeNumber(title, step, event) {
+      let quantitySymbols;
+      if (step.length <= 2) {
+        quantitySymbols = 0;
+      } else if (step.length > 2) {
+        quantitySymbols = step.length - 2;
+      }
+
+      let calculate = title - Math.floor(title);
+      calculate =
+        Math.floor(calculate * Math.pow(10, quantitySymbols)) /
+        Math.pow(10, quantitySymbols);
+
+      // console.log("calculate", calculate);
+      calculate = `${calculate}`;
+      // console.log("calculate", calculate.length);
+      // console.log("quantitySymbols", quantitySymbols);
+
+      let newTitle =
+        Math.floor(title * Math.pow(10, quantitySymbols)) /
+        Math.pow(10, quantitySymbols);
+
+      if (calculate.length >= quantitySymbols + 2) {
+        // event.target.value =event.target.value.slice(0,-1)
+        // event.target.value = event.target.value.slice(0,`${newTitle}`.length)
+        event.target.value = newTitle;
+        // event.preventDefault();
+      }
+
+      // item.preventDefault();
+      // console.log(item.target.value.length);
+      // if (item.target.value.length > 4) {
+      //   item.preventDefault();
+      // }
+    },
+
     startEditRow() {
       this.$store.commit("changeTextEditing", [true, this.indexRow]);
     },
