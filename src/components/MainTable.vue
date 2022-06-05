@@ -7,14 +7,25 @@
           v-for="(header, keyColumn) in $store.state.headers"
           :key="header.id"
         >
-          {{ header.title }}
-
-          <ui-remove-column-button
-            @click="removeColumn(keyColumn)"
-          ></ui-remove-column-button>
+          <div class="main-table_head_cell_container">
+            <p>{{ header.title }}</p>
+            <div class="main-table_button_container">
+              <div class="main-table_button-sort_container">
+                <ui-sort-up-column-button
+                  @click="sortReverseRowList(keyColumn, header.type)"
+                ></ui-sort-up-column-button>
+                <ui-sort-down-column-button
+                  @click="sortRowList(keyColumn, header.type)"
+                ></ui-sort-down-column-button>
+              </div>
+              <ui-remove-column-button
+                @click="removeColumn(keyColumn)"
+              ></ui-remove-column-button>
+            </div>
+          </div>
         </th>
 
-        <th class="main-table_head_cell">
+        <th class="main-table_head_cell main-table_head_button-column">
           <img
             class="main-table_settings-icon"
             src="@/assets/icons/settings-icon.svg"
@@ -38,24 +49,56 @@
 <script>
 import MainTableRow from "./MainTableRow.vue";
 import UiRemoveColumnButton from "@/ui/UiRemoveColumnButton.vue";
+import UiSortUpColumnButton from "@/ui/UiSortUpColumnButton.vue";
+import UiSortDownColumnButton from "@/ui/UiSortDownColumnButton.vue";
 
 export default {
-  components: { MainTableRow, UiRemoveColumnButton },
+  components: {
+    MainTableRow,
+    UiRemoveColumnButton,
+    UiSortUpColumnButton,
+    UiSortDownColumnButton,
+  },
 
   data() {
     return {};
   },
 
   methods: {
+    sortReverseRowList(keyColumn, columnType) {
+      this.$store.commit("disableTextEditing");
+      this.$store.commit("sortReverseRowList", [keyColumn, columnType]);
+      this.$store.commit("setMainTable");
+    },
+    sortRowList(keyColumn, columnType) {
+      this.$store.commit("disableTextEditing");
+      this.$store.commit("sortRowList", [keyColumn, columnType]);
+      this.$store.commit("setMainTable");
+    },
     removeColumn(keyColumn) {
       this.$store.commit("disableTextEditing");
       this.$store.commit("removeColumn", [keyColumn]);
+      this.$store.commit("setMainTable");
     },
   },
 };
 </script>
 
 <style scoped>
+.main-table_head_cell_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-table_button_container {
+  margin-left: 5px;
+  display: flex;
+}
+.main-table_button-sort_container {
+  display: flex;
+  flex-direction: column;
+}
+
 .main-table_table {
   margin-bottom: 16px;
   table-layout: fixed;
@@ -87,5 +130,10 @@ export default {
 
 .main-table_settings-icon {
   height: 30px;
+  margin-right: 35px;
+}
+.main-table_head_button-column{
+  text-align: right;
+  width: 100px;
 }
 </style>

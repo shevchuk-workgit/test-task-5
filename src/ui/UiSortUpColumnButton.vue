@@ -1,6 +1,6 @@
 <template>
   <button class="button">
-    <img class="button_img" src="@/assets/icons/remove-white-icon.svg" />
+    <img class="button_img" src="@/assets/icons/arrow-up.svg" />
   </button>
 </template>
 
@@ -12,11 +12,9 @@ export default {};
 .button {
   background-color: rgb(50, 50, 50);
   border: none;
-  border-top-right-radius:5px ;
-  border-bottom-right-radius:5px ;
-
+  border-top-left-radius: 5px;
   transition: 0.2s;
-  padding: 5px;
+  padding: 0;
 }
 .button:hover {
   background-color: rgb(10, 10, 10);
@@ -26,7 +24,7 @@ export default {};
 }
 .button_img {
   display: block; 
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
 }
 </style>

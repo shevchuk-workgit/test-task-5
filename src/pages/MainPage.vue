@@ -1,5 +1,7 @@
 <template>
-  <main-page-modal-create-column v-if="$store.state.showModalCreateColumn"></main-page-modal-create-column>
+  <main-page-modal-create-column
+    v-if="$store.state.showModalCreateColumn"
+  ></main-page-modal-create-column>
   <div class="main-page_container">
     <ui-add-button class="ui-add-button_column" @click="createNewColumn"
       >Add column</ui-add-button
@@ -15,7 +17,7 @@
 <script>
 import UiAddButton from "@/ui/UiAddButton.vue";
 import MainTable from "@/components/MainTable.vue";
-import MainPageModalCreateColumn from '@/components/MainPageModalCreateColumn.vue';
+import MainPageModalCreateColumn from "@/components/MainPageModalCreateColumn.vue";
 
 export default {
   components: { UiAddButton, MainTable, MainPageModalCreateColumn },
@@ -27,14 +29,17 @@ export default {
   methods: {
     createNewColumn() {
       this.$store.commit("changeShowModalCreateColumn");
-
-      // this.$store.commit("disableTextEditing");
-
-      // this.$store.commit("createNewColumn");
     },
     createNewRow() {
       this.$store.commit("createNewRow");
+      this.$store.commit("setMainTable");
     },
+  },
+
+  mounted() {
+    this.$store.commit("getMainTable");
+    this.$store.commit("disableTextEditing");
+    this.$store.commit("setMainTable");
   },
 };
 </script>

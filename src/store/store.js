@@ -63,37 +63,58 @@ export default createStore({
   getters: {},
 
   mutations: {
-    removeColumn(state,[keyColumn]){
-      console.log(keyColumn)
+    sortReverseRowList(state, [keyColumn, columnType]) {
+      let newRowList = JSON.parse(JSON.stringify(state.rowList));
 
-      // state.rowList.forEach((item)=>{
-      //   // console.log(item[keyColumn])
-      //   console.log(item)
+      if (columnType != "number") {
+        newRowList.sort((prev, next) => {
+          if (prev[keyColumn].rowTitle > next[keyColumn].rowTitle) return -1;
+          if (prev[keyColumn].rowTitle < next[keyColumn].rowTitle) return 1;
+        });
 
-      // })
-      const newHeaders = JSON.parse(JSON.stringify(state.headers))
-      delete newHeaders[keyColumn]
-      state.headers = JSON.parse(JSON.stringify(newHeaders))
+        state.rowList = JSON.parse(JSON.stringify(newRowList));
+      }
+      if (columnType == "number") {
+        newRowList.sort((prev, next) => {
+          return next[keyColumn].rowTitle - prev[keyColumn].rowTitle;
+        });
 
-      const newRowList = state.rowList.map((item)=>{
-        // console.log(item)
-        delete item[keyColumn]
-        return item
-      })
-      // console.log(newRowList)
+        state.rowList = JSON.parse(JSON.stringify(newRowList));
+      }
+    },
+    sortRowList(state, [keyColumn, columnType]) {
+      let newRowList = JSON.parse(JSON.stringify(state.rowList));
 
-      state.rowList = JSON.parse(JSON.stringify(newRowList))
+      if (columnType != "number") {
+        newRowList.sort((prev, next) => {
+          if (prev[keyColumn].rowTitle < next[keyColumn].rowTitle) return -1;
+          if (prev[keyColumn].rowTitle > next[keyColumn].rowTitle) return 1;
+        });
 
-      
+        state.rowList = JSON.parse(JSON.stringify(newRowList));
+      }
+      if (columnType == "number") {
+        newRowList.sort((prev, next) => {
+          return prev[keyColumn].rowTitle - next[keyColumn].rowTitle;
+        });
 
+        state.rowList = JSON.parse(JSON.stringify(newRowList));
+      }
+    },
+    removeColumn(state, [keyColumn]) {
+      const newHeaders = JSON.parse(JSON.stringify(state.headers));
+      delete newHeaders[keyColumn];
+      state.headers = JSON.parse(JSON.stringify(newHeaders));
 
-      
+      const newRowList = state.rowList.map((item) => {
+        delete item[keyColumn];
+        return item;
+      });
 
-
+      state.rowList = JSON.parse(JSON.stringify(newRowList));
     },
     changeShowModalCreateColumn(state) {
       state.showModalCreateColumn = !state.showModalCreateColumn;
-      // console.log(state.showModalCreateColumn)
     },
     disableTextEditing(state) {
       state.rowList.map((item) => {
@@ -162,7 +183,6 @@ export default createStore({
           if (newRow[item].rowTitle != newTitle) {
             newRow[item].rowTitle = newTitle;
           }
-
         }
       }
 
@@ -186,6 +206,28 @@ export default createStore({
 
     changeTextEditing(state, [currentTextEditing, indexRow]) {
       state.rowList[indexRow].textEditing = currentTextEditing;
+    },
+
+    getMainTable(state) {
+      let LocalTable = JSON.parse(localStorage.getItem("mainTable"));
+
+      if (LocalTable) {
+        state.headers = JSON.parse(JSON.stringify(LocalTable.headers));
+        state.rowList = JSON.parse(JSON.stringify(LocalTable.rowList));
+        state.currentColumnValue = JSON.parse(
+          JSON.stringify(LocalTable.currentColumnValue)
+        );
+      }
+    },
+
+    setMainTable(state) {
+      const newMainTable = {
+        headers: JSON.parse(JSON.stringify(state.headers)),
+        rowList: JSON.parse(JSON.stringify(state.rowList)),
+        currentColumnValue: state.currentColumnValue,
+      };
+
+      localStorage.setItem("mainTable", JSON.stringify(newMainTable));
     },
   },
 

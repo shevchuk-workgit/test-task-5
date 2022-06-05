@@ -68,10 +68,12 @@ export default {
     acceptEditRow() {
       this.$store.commit("changeRow", [this.changedRow, this.indexRow]);
       this.$store.commit("changeTextEditing", [false, this.indexRow]);
+      this.$store.commit("setMainTable");
     },
 
     deleteRow() {
       this.$store.commit("removeRow", this.indexRow);
+      this.$store.commit("setMainTable");
     },
   },
 
@@ -127,6 +129,7 @@ export default {
   outline: 2px solid black;
 }
 .main-table-row_cell_row-button {
+  text-align: right;
   width: 100px;
 }
 </style>

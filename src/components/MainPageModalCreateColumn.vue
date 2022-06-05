@@ -81,7 +81,7 @@ export default {
           currentTypeProperty = this.optionDateValue;
         }
       }
-      
+
       this.$store.commit("createNewColumn", [
         columnName,
         this.currentState,
@@ -89,6 +89,7 @@ export default {
       ]);
 
       this.closeModalCreateColumn();
+      this.$store.commit("setMainTable");
     },
 
     inputOptionText(item) {
@@ -113,13 +114,6 @@ export default {
         this.optionTextValue = "0.0";
       }
     },
-  },
-  mounted() {
-    // const currentDate = new Date();
-
-    // this.optionDateValue = `0${currentDate.getFullYear()}-0${
-    //   currentDate.getMonth() + 1
-    // }-0${currentDate.getDate()}`;
   },
 };
 </script>
