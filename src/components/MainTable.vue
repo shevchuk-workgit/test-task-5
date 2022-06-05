@@ -4,11 +4,16 @@
       <tr>
         <th
           class="main-table_head_cell"
-          v-for="header in $store.state.headers"
+          v-for="(header, keyColumn) in $store.state.headers"
           :key="header.id"
         >
           {{ header.title }}
+
+          <ui-remove-column-button
+            @click="removeColumn(keyColumn)"
+          ></ui-remove-column-button>
         </th>
+
         <th class="main-table_head_cell">
           <img
             class="main-table_settings-icon"
@@ -32,30 +37,20 @@
 
 <script>
 import MainTableRow from "./MainTableRow.vue";
+import UiRemoveColumnButton from "@/ui/UiRemoveColumnButton.vue";
 
 export default {
-  components: { MainTableRow },
+  components: { MainTableRow, UiRemoveColumnButton },
 
   data() {
     return {};
   },
 
-  props: {
-    // headers: {
-    //   type: Object,
-    // },
-    // rowList: {
-    //   type: Array,
-    // },
-  },
-
   methods: {
-    // changeRowFeature(newRow, indexRow) {
-    //   this.$emit("changeRow", newRow, indexRow);
-    // },
-    // removeRow(indexRow) {
-    //   this.$emit("removeRow", indexRow);
-    // },
+    removeColumn(keyColumn) {
+      this.$store.commit("disableTextEditing");
+      this.$store.commit("removeColumn", [keyColumn]);
+    },
   },
 };
 </script>
@@ -72,6 +67,8 @@ export default {
 }
 .main-table_head_cell {
   padding: 10px;
+  word-break: break-word;
+
   text-align: center;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
